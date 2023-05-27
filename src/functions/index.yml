@@ -1,0 +1,15 @@
+HealthCheck:
+  handler: src/functions/healthcheck.healthcheck
+  description: Healthcheck to ensure the service is up
+  events:
+    - http:
+        path: healthcheck
+        method: get
+
+AddBeer:
+  handler: src/functions/add-beer.handler
+  description: Add beer to database
+  events:
+    - http:
+        path: add/beer
+        method: post

@@ -26,12 +26,20 @@ resources:
           - - "https://"
             - Ref: ApiGatewayRestApi
             - ".execute-api.${self:provider.region}.amazonaws.com/${self:provider.stage}"
+  Resources:
+    BeersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: BeersTable
+        AttributeDefinitions:
+          - AttributeName: beer_id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: beer_id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5
 
 functions:
-  healthcheck:
-    handler: src/functions/healthcheck.healthcheck
-    description: Healthcheck to ensure the service is up
-    events:
-      - http:
-          path: healthcheck
-          method: get
+  - ${file(src/functions/index.yml)}

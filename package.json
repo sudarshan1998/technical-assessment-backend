@@ -20,7 +20,8 @@
   },
   "homepage": "https://github.com/JoshuaToth/serverless-api-typescript-template#readme",
   "dependencies": {
-    "typescript": "^3.5.3"
+    "typescript": "^3.5.3",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
