@@ -1,10 +1,21 @@
-# Serverless API: Typescript and Jest Template
-A Serverless API template using Typescript and Jest.
+# Introduction
+A Serverless APIs for beer product.
 
-This setup uses AWS as the provider. 
+In this project, we will create an APIs for adding, updating and deleting the beer.
 
-To use your own provider, edit the `serverless.yml` as needed.
-The endpoint for the tests to run against will also need to be set to be more specific to your provider.
+## Technology Used
+
+### Programming Language
+
+- Typescript + Node.js as a programming language
+- Jest framework for unit test
+
+### AWS Services
+
+- Lambda
+- Cloudformation
+- Dynamodb
+- API Gateway
 
 ## Getting up and running
 First install `serverless` and get that up and running. documentation [here](https://serverless.com/framework/docs/providers/aws/guide/quick-start/).
@@ -23,11 +34,6 @@ npm install
 npm run deploy
 ```
 
-## Deployment - Prod
-```
-npm run deploy:prod
-```
-
 ## To remove:
 ```
 npm run remove
@@ -44,7 +50,6 @@ Test the service is up
 ```
 
 # Testing
-This template uses Jest (Typescript) to run its tests.
 
 To test, first deploy the application to your desired AWS stack.
 Then run
