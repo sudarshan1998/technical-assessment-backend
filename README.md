@@ -28,7 +28,7 @@ Then:
 npm install
 ```
 
-## Deployment - Dev
+## Deployment
 
 ```
 npm run deploy
