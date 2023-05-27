@@ -1,6 +1,4 @@
-# For full config options, check the docs:
-#    docs.serverless.com
-service: serverless-template 
+service: beers 
 
 plugins:
   - serverless-plugin-typescript
