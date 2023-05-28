@@ -1,28 +1,23 @@
 service: plerion-beers 
 
-plugins:
-  - serverless-plugin-typescript
-  - serverless-stack-output
-  - serverless-offline
-
 provider:
   name: aws
   runtime: nodejs18.x
   stage: ${opt:stage, 'dev'}
   region: eu-north-1
-  # environment:
-  #   BEERS_TABLE: ${self:service}-BeersTable-${sls:stage}
-  # iam:
-  #   role:
-  #     statements:
-  #       - Effect: 'Allow'
-  #         Action:
-  #           - 'dynamodb:PutItem'
-  #           - 'dynamodb:Get*'
-  #           - 'dynamodb:Scan*'
-  #           - 'dynamodb:UpdateItem'
-  #           - 'dynamodb:DeleteItem'
-  #         Resource: arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:service}-BeersTable-${sls:stage}
+  environment:
+    BEERS_TABLE: ${self:service}-BeersTable-${sls:stage}
+  iam:
+    role:
+      statements:
+        - Effect: 'Allow'
+          Action:
+            - 'dynamodb:PutItem'
+            - 'dynamodb:Get*'
+            - 'dynamodb:Scan*'
+            - 'dynamodb:UpdateItem'
+            - 'dynamodb:DeleteItem'
+          Resource: "*"
 
 custom:
   stage: ${opt:stage, 'dev'}
@@ -39,20 +34,25 @@ resources:
           - - "https://"
             - Ref: ApiGatewayRestApi
             - ".execute-api.${self:provider.region}.amazonaws.com/${self:provider.stage}"
-  # Resources:
-  #   BeersTable:
-  #     Type: AWS::DynamoDB::Table
-  #     Properties:
-  #       AttributeDefinitions:
-  #         - AttributeName: beer_id
-  #           AttributeType: S
-  #       KeySchema:
-  #         - AttributeName: beer_id
-  #           KeyType: HASH
-  #       ProvisionedThroughput:
-  #         ReadCapacityUnits: 5
-  #         WriteCapacityUnits: 5
-  #       TableName: ${self:service}-BeersTable-${sls:stage}
+  Resources:
+    BeersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: beer_id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: beer_id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5
+        TableName: ${self:service}-BeersTable-${sls:stage}
+
+plugins:
+  - serverless-plugin-typescript
+  - serverless-stack-output
+  - serverless-offline
 
 functions:
   - ${file(src/functions/index.yml)}

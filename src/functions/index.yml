@@ -13,3 +13,22 @@ AddBeer:
     - http:
         path: add/beer
         method: post
+        cors: true
+
+DeleteBeer:
+  handler: src/functions/delete-beer.handler
+  description: Delete beer from the database
+  events:
+    - http:
+        path: /delete/beer/{beer_id}
+        method: delete
+        cors: true
+
+GetAllBeers:
+  handler: src/functions/get-all-beers.handler
+  description: Get all the beers from the database
+  events:
+    - http:
+        path: /get/all/beers
+        method: get
+        cors: true
