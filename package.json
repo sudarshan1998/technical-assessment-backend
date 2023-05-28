@@ -1,7 +1,7 @@
 {
-  "name": "severless-template",
+  "name": "plerion-technical-assessment",
   "version": "0.0.1",
-  "description": "A template for a Serverless API using Typescript and Jest",
+  "description": "Technical assessment for a Serverless API using Typescript and Jest",
   "main": "functions/healthcheck.js",
   "scripts": {
     "test": "jest",
@@ -9,28 +9,32 @@
     "deploy": "sls deploy",
     "deploy:prod": "sls deploy --stage production"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+JoshuaToth/serverless-api-typescript-template.git"
-  },
-  "author": "Joshua Toth",
+  "author": "Sudarshan Dhakal",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/JoshuaToth/serverless-api-typescript-template/issues"
-  },
-  "homepage": "https://github.com/JoshuaToth/serverless-api-typescript-template#readme",
   "dependencies": {
-    "typescript": "^3.5.3"
+    "aws-lambda": "^1.0.7",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.22.2",
+    "@babel/preset-typescript": "^7.21.5",
+    "@types/aws-lambda": "^8.10.115",
     "@types/axios": "^0.14.0",
     "@types/jest": "^24.0.15",
+    "@typescript-eslint/eslint-plugin": "^5.59.7",
     "axios": "^0.19.0",
-    "jest": "^24.8.0",
+    "babel-jest": "^29.5.0",
+    "eslint": "^8.41.0",
+    "eslint-config-standard-with-typescript": "^34.0.1",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-n": "^15.7.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "jest": "^24.9.0",
     "serverless-offline": "^12.0.4",
     "serverless-plugin-typescript": "^1.1.7",
     "serverless-stack-output": "^0.2.3",
     "ts-jest": "^24.0.2",
-    "tslint": "^5.18.0"
+    "tslint": "^5.18.0",
+    "typescript": "^5.0.4"
   }
 }
