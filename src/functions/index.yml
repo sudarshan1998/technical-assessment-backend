@@ -32,3 +32,4 @@ GetAllBeers:
         path: /get/all/beers
         method: get
         cors: true
+        
