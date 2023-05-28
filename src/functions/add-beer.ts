@@ -4,7 +4,7 @@ import { getUuid } from "../utils/uuid"
 
 // Request Input from the front end
 type Input = {
-  beer_name: string,
+  name: string,
   image_url: string,
   genre: string,
   price: string,
@@ -66,7 +66,7 @@ const addBeer = async (body: Input)=> {
     Item: {
       "beer_id": beerId,
       "name": {
-        S: body.beer_name
+        S: body.name
       },
       "image": {
         S: body.image_url
@@ -96,13 +96,13 @@ const addBeer = async (body: Input)=> {
  * @param body contains the request body in json
  * @returns array of array containing string
  */
-const validateRequestBody = (body: any) => {
+const validateRequestBody = (body: Input) => {
   let errors: string[] = []
   if (body.name.length === 0) {
     errors.push("The field 'name' cannot be empty")
   }
     
-  if (body.image.length === 0) {
+  if (body.image_url.length === 0) {
     errors.push("The field 'image' cannot be empty")
   }
   
