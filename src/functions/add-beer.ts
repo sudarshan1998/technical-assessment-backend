@@ -2,6 +2,15 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import AWS from "aws-sdk";
 import { getUuid } from "../utils/uuid"
 
+// Request Input from the front end
+type Input = {
+  beer_name: string,
+  image_url: string,
+  genre: string,
+  price: string,
+  description: string
+}
+
 const dynamoDB: AWS.DynamoDB.DocumentClient = new AWS.DynamoDB.DocumentClient();
 
 /**
@@ -13,7 +22,7 @@ export const handler = async (
   event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResult> => {
   // Parse the request body
-  const body = JSON.parse(event.body!);
+  const body: Input = JSON.parse(event.body!);
   const errors: string[] = validateRequestBody(body)
 
   if (errors.length > 0) {
@@ -43,7 +52,7 @@ export const handler = async (
  * @param event 
  * @returns void
  */
-const addBeer = async (body: any)=> {
+const addBeer = async (body: Input)=> {
   const beerId: AWS.DynamoDB.PutItemInputAttributeMap = getUuid()
   if(!beerId) {
     console.error("Error: Error generating beerId" )
@@ -55,12 +64,22 @@ const addBeer = async (body: any)=> {
   
   const params: AWS.DynamoDB.PutItemInput = {
     Item: {
-      beer_id: beerId,
-      name: body.name,
-      image: body.image_url,
-      genre: body.genre,
-      price: body.price,
-      description: body.description
+      "beer_id": beerId,
+      "name": {
+        S: body.beer_name
+      },
+      "image": {
+        S: body.image_url
+      },
+      "genre": {
+        S: body.genre
+      },
+      "price": {
+        S: body.price
+      },
+      "description": {
+        S: body.description
+      }
     },
     TableName: process.env.BEERS_TABLE!
   };
@@ -100,3 +119,5 @@ const validateRequestBody = (body: any) => {
   }
   return errors
 }
+
+export { validateRequestBody, addBeer }
