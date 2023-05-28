@@ -9,4 +9,3 @@ const getUuid = () => {
   }
 
   export { getUuid }
-  
