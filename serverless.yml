@@ -1,4 +1,4 @@
-service: beers 
+service: plerion-beers 
 
 plugins:
   - serverless-plugin-typescript
@@ -9,7 +9,20 @@ provider:
   name: aws
   runtime: nodejs18.x
   stage: ${opt:stage, 'dev'}
-  region: eu-west-1
+  region: eu-north-1
+  # environment:
+  #   BEERS_TABLE: ${self:service}-BeersTable-${sls:stage}
+  # iam:
+  #   role:
+  #     statements:
+  #       - Effect: 'Allow'
+  #         Action:
+  #           - 'dynamodb:PutItem'
+  #           - 'dynamodb:Get*'
+  #           - 'dynamodb:Scan*'
+  #           - 'dynamodb:UpdateItem'
+  #           - 'dynamodb:DeleteItem'
+  #         Resource: arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:service}-BeersTable-${sls:stage}
 
 custom:
   stage: ${opt:stage, 'dev'}
@@ -26,20 +39,20 @@ resources:
           - - "https://"
             - Ref: ApiGatewayRestApi
             - ".execute-api.${self:provider.region}.amazonaws.com/${self:provider.stage}"
-  Resources:
-    BeersTable:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        TableName: BeersTable
-        AttributeDefinitions:
-          - AttributeName: beer_id
-            AttributeType: S
-        KeySchema:
-          - AttributeName: beer_id
-            KeyType: HASH
-        ProvisionedThroughput:
-          ReadCapacityUnits: 5
-          WriteCapacityUnits: 5
+  # Resources:
+  #   BeersTable:
+  #     Type: AWS::DynamoDB::Table
+  #     Properties:
+  #       AttributeDefinitions:
+  #         - AttributeName: beer_id
+  #           AttributeType: S
+  #       KeySchema:
+  #         - AttributeName: beer_id
+  #           KeyType: HASH
+  #       ProvisionedThroughput:
+  #         ReadCapacityUnits: 5
+  #         WriteCapacityUnits: 5
+  #       TableName: ${self:service}-BeersTable-${sls:stage}
 
 functions:
   - ${file(src/functions/index.yml)}

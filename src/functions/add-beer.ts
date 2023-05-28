@@ -8,6 +8,7 @@ export const handler = async (
   try {
     await addBeer(event)
   } catch (error) {
+    console.log("Error is " + error)
     return {
       statusCode: 500,
       body: JSON.stringify({ error: "Internal server error" }),
@@ -24,18 +25,20 @@ const addBeer = async (event: APIGatewayProxyEvent) => {
     }
   }
   // Parse the request body
-  const body = JSON.parse(event.body);
-  const params: AWS.DynamoDB.PutItemInput = {
-    Item: {
-      beer_id: beerId,
-      name: body.name,
-      genre: body.genre,
-      description: body.description
-    },
-    TableName: "BeersTable"
-  };
+  // const body = JSON.parse(event.body);
+  // const params: AWS.DynamoDB.PutItemInput = {
+  //   Item: {
+  //     beer_id: beerId,
+  //     name: body.name,
+  //     image: body.image_url,
+  //     genre: body.genre,
+  //     price: body.price,
+  //     description: body.description
+  //   },
+  //   TableName: "BEERS_TABLE"
+  // };
 
-  await dynamoDB.put(params).promise()
+  // await dynamoDB.put(params).promise()
   return {
     statusCode: 200,
     body: JSON.stringify({ message: "Item saved successfully" }),
