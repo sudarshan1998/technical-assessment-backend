@@ -34,7 +34,7 @@ export const handler = async (
 const deleteBeer = async (event: APIGatewayProxyEvent)=> {
   const params: AWS.DynamoDB.DeleteItemInput = {
     Key: {
-      "beer_id": {
+      beer_id: {
         S: event.pathParameters!.beer_id
       }
     },

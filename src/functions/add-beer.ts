@@ -2,7 +2,7 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import AWS from "aws-sdk";
 import { getUuid } from "../utils/uuid"
 
-// Request Input from the front end
+// Input from the front end
 type Input = {
   name: string,
   image_url: string,
@@ -87,7 +87,7 @@ const addBeer = async (body: Input)=> {
     // DynamoDB query to write item in database
     await dynamoDB.put(params).promise()
   } catch (error) {
-    console.info("Error " + error)
+    console.error("Error " + error)
   }
 }
 
