@@ -7,6 +7,7 @@ provider:
   region: us-east-1
   environment:
     BEERS_TABLE: ${self:service}-BeersTable-${sls:stage}
+    API_URL: https://0bx12os2ek.execute-api.us-east-1.amazonaws.com/dev/
   iam:
     role:
       statements:
@@ -41,9 +42,13 @@ resources:
         AttributeDefinitions:
           - AttributeName: beer_id
             AttributeType: S
+          - AttributeName: name
+            AttributeType: S
         KeySchema:
           - AttributeName: beer_id
             KeyType: HASH
+          - AttributeName: name
+            KeyType: RANGE
         ProvisionedThroughput:
           ReadCapacityUnits: 5
           WriteCapacityUnits: 5

@@ -27,7 +27,7 @@ export const handler = async (
 
   if (errors.length > 0) {
     return {
-      statusCode: 400,
+      statusCode: 500,
       body: JSON.stringify({error: errors})
     }
   }
@@ -83,12 +83,8 @@ const addBeer = async (body: Input)=> {
     },
     TableName: process.env.BEERS_TABLE!
   };
-  try {
     // DynamoDB query to write item in database
-    await dynamoDB.put(params).promise()
-  } catch (error) {
-    console.error("Error " + error)
-  }
+  await dynamoDB.put(params).promise()
 }
 
 /**

@@ -40,10 +40,6 @@ const deleteBeer = async (event: APIGatewayProxyEvent)=> {
     },
     TableName: process.env.BEERS_TABLE!
   };
-  try {
   // DynamoDB query to delete item in database
-    await dynamoDB.delete(params).promise()
-  } catch (error) {
-    console.info("Error " + error)
-  }
+  await dynamoDB.delete(params).promise()
 }
