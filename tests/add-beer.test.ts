@@ -38,7 +38,6 @@ describe('Handler', () => {
 
   it('should return a successful response when the request body is valid', async () => {
     const result = await handler(mockEvent);
-    console.log("result is " + JSON.stringify(result))
     expect(result.statusCode).toBe(200);
     expect(result.body).toBe(JSON.stringify({ message: 'Item saved successfully.' }));
   });
