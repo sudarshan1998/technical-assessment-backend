@@ -11,7 +11,7 @@ type RequestBody = {
   description: string
 }
 
-const dynamoDB: AWS.DynamoDB.DocumentClient = new AWS.DynamoDB.DocumentClient();
+const dynamoDB: AWS.DynamoDB.DocumentClient = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
 
 /**
  * Handler to handle the main business logic
@@ -62,34 +62,19 @@ const addBeer = async (body: RequestBody)=> {
     }
   }
   
-  const params: AWS.DynamoDB.PutItemInput = {
+  const params = {
     Item: {
       "beer_id": beerId,
-      "name": {
-        S: body.name
-      },
-      "image": {
-        S: body.image_url
-      },
-      "genre": {
-        S: body.genre
-      },
-      "price": {
-        S: body.price
-      },
-      "description": {
-        S: body.description
-      }
+      "name": body.name,
+      "image": body.image_url,
+      "genre": body.genre,
+      "price": body.price,
+      "description": body.description
     },
     TableName: process.env.BEERS_TABLE!
   };
   // DynamoDB query to write item in database
-  try {
-    await dynamoDB.put(params).promise()
-  } catch (error) {
-    console.error("Error " + error)
-    return error
-  }
+  await dynamoDB.put(params).promise()
 }
 
 /**
