@@ -7,7 +7,6 @@ provider:
   region: us-east-1
   environment:
     BEERS_TABLE: ${self:service}-BeersTable-${sls:stage}
-    API_URL: https://0bx12os2ek.execute-api.us-east-1.amazonaws.com/dev/
   iam:
     role:
       statements:
