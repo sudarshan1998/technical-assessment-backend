@@ -2,8 +2,8 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import AWS from "aws-sdk";
 import { getUuid } from "../utils/uuid"
 
-// Request Input from the front end
-type Input = {
+// Request from the front end
+type RequestBody = {
   name: string,
   image_url: string,
   genre: string,
@@ -11,7 +11,7 @@ type Input = {
   description: string
 }
 
-const dynamoDB: AWS.DynamoDB.DocumentClient = new AWS.DynamoDB.DocumentClient();
+const dynamoDB: AWS.DynamoDB.DocumentClient = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
 
 /**
  * Handler to handle the main business logic
@@ -22,12 +22,12 @@ export const handler = async (
   event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResult> => {
   // Parse the request body
-  const body: Input = JSON.parse(event.body!);
+  const body: RequestBody = JSON.parse(event.body!);
   const errors: string[] = validateRequestBody(body)
 
   if (errors.length > 0) {
     return {
-      statusCode: 400,
+      statusCode: 500,
       body: JSON.stringify({error: errors})
     }
   }
@@ -52,7 +52,7 @@ export const handler = async (
  * @param event 
  * @returns void
  */
-const addBeer = async (body: Input)=> {
+const addBeer = async (body: RequestBody) => {
   const beerId: AWS.DynamoDB.PutItemInputAttributeMap = getUuid()
   if(!beerId) {
     console.error("Error: Error generating beerId" )
@@ -62,32 +62,22 @@ const addBeer = async (body: Input)=> {
     }
   }
   
-  const params: AWS.DynamoDB.PutItemInput = {
+  const params = {
     Item: {
       "beer_id": beerId,
-      "name": {
-        S: body.name
-      },
-      "image": {
-        S: body.image_url
-      },
-      "genre": {
-        S: body.genre
-      },
-      "price": {
-        S: body.price
-      },
-      "description": {
-        S: body.description
-      }
+      "name": body.name,
+      "image": body.image_url,
+      "genre": body.genre,
+      "price": body.price,
+      "description": body.description
     },
     TableName: process.env.BEERS_TABLE!
   };
+  // DynamoDB query to write item in database
   try {
-    // DynamoDB query to write item in database
     await dynamoDB.put(params).promise()
   } catch (error) {
-    console.info("Error " + error)
+    return error
   }
 }
 
@@ -96,7 +86,7 @@ const addBeer = async (body: Input)=> {
  * @param body contains the request body in json
  * @returns array of array containing string
  */
-const validateRequestBody = (body: Input) => {
+const validateRequestBody = (body: RequestBody) => {
   let errors: string[] = []
   if (body.name.length === 0) {
     errors.push("The field 'name' cannot be empty")

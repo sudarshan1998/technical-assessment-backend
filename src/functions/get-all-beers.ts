@@ -35,11 +35,8 @@ const getAllBeers = async ()=> {
   const params: AWS.DynamoDB.ScanInput = {
     TableName: process.env.BEERS_TABLE!
   };
-  try {
   // DynamoDB query to get all items from database
-    const allBeers = await dynamoDB.scan(params).promise()
-		return allBeers.Items
-  } catch (error) {
-    console.info("Error " + error)
-  }
+  const allBeers = await dynamoDB.scan(params).promise()
+  if(allBeers.Items) return allBeers.Items
+  return []
 }

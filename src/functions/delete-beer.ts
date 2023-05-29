@@ -15,7 +15,7 @@ export const handler = async (
     await deleteBeer(event)
     return {
       statusCode: 200,
-      body: JSON.stringify({message: "Item deleted successfully."})
+      body: JSON.stringify({message: `Item ${event.pathParameters!.beer_id} deleted successfully.`})
     }
   } catch (error) {
     console.error("Error " + error)
@@ -32,18 +32,12 @@ export const handler = async (
  * @returns void
  */
 const deleteBeer = async (event: APIGatewayProxyEvent)=> {
-  const params: AWS.DynamoDB.DeleteItemInput = {
+  const params = {
     Key: {
-      "beer_id": {
-        S: event.pathParameters!.beer_id
-      }
+      "beer_id": event.pathParameters!.beer_id,
     },
     TableName: process.env.BEERS_TABLE!
   };
-  try {
   // DynamoDB query to delete item in database
-    await dynamoDB.delete(params).promise()
-  } catch (error) {
-    console.info("Error " + error)
-  }
+  await dynamoDB.delete(params).promise()
 }
