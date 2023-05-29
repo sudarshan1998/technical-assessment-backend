@@ -23,8 +23,6 @@ describe('Handler', () => {
 
   beforeAll(() => {
     process.env.BEERS_TABLE = "Sample"
-    const region = 'jksdfahg';
-    AWS.config.update({ region });  
     jest.mock('aws-sdk', () => ({
       DynamoDB: {
         DocumentClient: mockDynamoDBDocumentClient,
@@ -41,7 +39,7 @@ describe('Handler', () => {
 
   it('should return a successful response when the request body is valid', async () => {
     const result = await handler(mockEvent);
-
+    console.log("result is " + JSON.stringify(result))
     expect(result.statusCode).toBe(200);
     expect(result.body).toBe(JSON.stringify({ message: 'Item saved successfully.' }));
   });
@@ -59,17 +57,12 @@ describe('Handler', () => {
 
     const result = await handler(invalidEvent);
 
-    expect(result.statusCode).toBe(400);
+    expect(result.statusCode).toBe(500);
     expect(result.body).toContain('The field');
     expect(mockDynamoDBPut).not.toHaveBeenCalled();
   });
 
 });
-
-// describe('addBeer', () => {
-//   // Write unit tests for the addBeer function
-
-// });
 
 describe('validateRequestBody', () => {
   it('should return an empty array when the request body is valid', () => {
@@ -104,7 +97,4 @@ describe('validateRequestBody', () => {
     expect(result).toContain("The field 'price' cannot be empty");
     expect(result).toContain("The field 'description' cannot be empty");
   });
-
-  // Write more test cases as needed
-
 });

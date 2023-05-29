@@ -2,8 +2,8 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import AWS from "aws-sdk";
 import { getUuid } from "../utils/uuid"
 
-// Input from the front end
-type Input = {
+// Request from the front end
+type RequestBody = {
   name: string,
   image_url: string,
   genre: string,
@@ -22,7 +22,7 @@ export const handler = async (
   event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResult> => {
   // Parse the request body
-  const body: Input = JSON.parse(event.body!);
+  const body: RequestBody = JSON.parse(event.body!);
   const errors: string[] = validateRequestBody(body)
 
   if (errors.length > 0) {
@@ -52,7 +52,7 @@ export const handler = async (
  * @param event 
  * @returns void
  */
-const addBeer = async (body: Input)=> {
+const addBeer = async (body: RequestBody)=> {
   const beerId: AWS.DynamoDB.PutItemInputAttributeMap = getUuid()
   if(!beerId) {
     console.error("Error: Error generating beerId" )
@@ -83,8 +83,13 @@ const addBeer = async (body: Input)=> {
     },
     TableName: process.env.BEERS_TABLE!
   };
-    // DynamoDB query to write item in database
-  await dynamoDB.put(params).promise()
+  // DynamoDB query to write item in database
+  try {
+    await dynamoDB.put(params).promise()
+  } catch (error) {
+    console.error("Error " + error)
+    return error
+  }
 }
 
 /**
@@ -92,7 +97,7 @@ const addBeer = async (body: Input)=> {
  * @param body contains the request body in json
  * @returns array of array containing string
  */
-const validateRequestBody = (body: Input) => {
+const validateRequestBody = (body: RequestBody) => {
   let errors: string[] = []
   if (body.name.length === 0) {
     errors.push("The field 'name' cannot be empty")
