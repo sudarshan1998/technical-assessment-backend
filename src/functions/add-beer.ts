@@ -52,7 +52,7 @@ export const handler = async (
  * @param event 
  * @returns void
  */
-const addBeer = async (body: RequestBody)=> {
+const addBeer = async (body: RequestBody) => {
   const beerId: AWS.DynamoDB.PutItemInputAttributeMap = getUuid()
   if(!beerId) {
     console.error("Error: Error generating beerId" )
@@ -74,7 +74,11 @@ const addBeer = async (body: RequestBody)=> {
     TableName: process.env.BEERS_TABLE!
   };
   // DynamoDB query to write item in database
-  await dynamoDB.put(params).promise()
+  try {
+    await dynamoDB.put(params).promise()
+  } catch (error) {
+    return error
+  }
 }
 
 /**

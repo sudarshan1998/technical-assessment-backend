@@ -1,6 +1,5 @@
 import { handler, addBeer, validateRequestBody } from '../src/functions/add-beer';
 import { APIGatewayProxyEvent } from 'aws-lambda';
-import AWS from 'aws-sdk';
 
 describe('Handler', () => {
   // Mock the necessary dependencies and set up initial test data

@@ -45,7 +45,7 @@ describe('handler', () => {
     // Verify the response
     expect(result).toEqual({
       statusCode: 200,
-      body: JSON.stringify({ message: 'Item deleted successfully.' }),
+      body: JSON.stringify({ message: 'Item sample_id deleted successfully.' }),
     });
   });
 });
