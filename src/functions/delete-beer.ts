@@ -15,12 +15,20 @@ export const handler = async (
     await deleteBeer(event)
     return {
       statusCode: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': false,
+      },
       body: JSON.stringify({message: `Item ${event.pathParameters!.beer_id} deleted successfully.`})
     }
   } catch (error) {
     console.error("Error " + error)
     return {
       statusCode: 500,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': false,
+      },
       body: JSON.stringify({ error: "Internal server error." }),
     };
   }

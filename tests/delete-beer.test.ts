@@ -45,6 +45,10 @@ describe('handler', () => {
     // Verify the response
     expect(result).toEqual({
       statusCode: 200,
+      headers: {
+        'Access-Control-Allow-Credentials': false,
+        'Access-Control-Allow-Origin': '*',
+      },
       body: JSON.stringify({ message: 'Item sample_id deleted successfully.' }),
     });
   });

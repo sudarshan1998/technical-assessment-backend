@@ -11,7 +11,7 @@ type RequestBody = {
   description: string
 }
 
-const dynamoDB: AWS.DynamoDB.DocumentClient = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
+const dynamoDB: AWS.DynamoDB.DocumentClient = new AWS.DynamoDB.DocumentClient();
 
 /**
  * Handler to handle the main business logic
@@ -28,6 +28,10 @@ export const handler = async (
   if (errors.length > 0) {
     return {
       statusCode: 500,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': false,
+      },
       body: JSON.stringify({error: errors})
     }
   }
@@ -36,12 +40,20 @@ export const handler = async (
     await addBeer(body)
     return {
       statusCode: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': false,
+      },
       body: JSON.stringify({message: "Item saved successfully."})
     }
   } catch (error) {
     console.error("Error " + error)
     return {
       statusCode: 500,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': false,
+      },
       body: JSON.stringify({ error: "Internal server error." }),
     };
   }
@@ -58,6 +70,10 @@ const addBeer = async (body: RequestBody) => {
     console.error("Error: Error generating beerId" )
     return {
       statusCode: 400,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': false,
+      },
       body: JSON.stringify({error: "Error generating beerId"})
     }
   }

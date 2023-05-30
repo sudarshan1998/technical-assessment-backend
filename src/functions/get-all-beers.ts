@@ -15,12 +15,20 @@ export const handler = async (
     const allBeers = await getAllBeers()
     return {
       statusCode: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': false,
+      },
       body: JSON.stringify({data: allBeers})
     }
   } catch (error) {
     console.error("Error " + error)
     return {
       statusCode: 500,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': false,
+      },
       body: JSON.stringify({ error: "Internal server error." }),
     };
   }
