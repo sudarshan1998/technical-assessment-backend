@@ -4,8 +4,8 @@
 
  //Header for the cors policy
 const headers = {
-	'Access-Control-Allow-Origin': '*',
-	'Access-Control-Allow-Credentials': false,
+  'Access-Control-Allow-Origin': "*",
+  'Access-Control-Allow-Credentials': false
 }
 
 export const successResponse = (body: {}) => {
