@@ -1,6 +1,7 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import AWS from "aws-sdk";
 import { getUuid } from "../utils/uuid"
+import { successResponse, interServerError, otherError } from "../utils/constants"
 
 // Request from the front end
 type RequestBody = {
@@ -26,36 +27,15 @@ export const handler = async (
   const errors: string[] = validateRequestBody(body)
 
   if (errors.length > 0) {
-    return {
-      statusCode: 500,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': false,
-      },
-      body: JSON.stringify({error: errors})
-    }
+    return successResponse({error: errors})
   }
 
   try {
     await addBeer(body)
-    return {
-      statusCode: 200,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': false,
-      },
-      body: JSON.stringify({message: "Item saved successfully."})
-    }
+    return successResponse({message: "Item saved successfully."})
   } catch (error) {
     console.error("Error " + error)
-    return {
-      statusCode: 500,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': false,
-      },
-      body: JSON.stringify({ error: "Internal server error." }),
-    };
+    return interServerError({ error: "Internal server error." })
   }
 };
 
@@ -68,14 +48,7 @@ const addBeer = async (body: RequestBody) => {
   const beerId: AWS.DynamoDB.PutItemInputAttributeMap = getUuid()
   if(!beerId) {
     console.error("Error: Error generating beerId" )
-    return {
-      statusCode: 400,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': false,
-      },
-      body: JSON.stringify({error: "Error generating beerId"})
-    }
+    return otherError({error: "Error generating beerId"})
   }
   
   const params = {

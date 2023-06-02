@@ -1,5 +1,6 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import AWS from "aws-sdk";
+import { successResponse, interServerError } from "../utils/constants"
 
 const dynamoDB: AWS.DynamoDB.DocumentClient = new AWS.DynamoDB.DocumentClient();
 
@@ -13,24 +14,10 @@ export const handler = async (
 ): Promise<APIGatewayProxyResult> => {
   try {
     await deleteBeer(event)
-    return {
-      statusCode: 200,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': false,
-      },
-      body: JSON.stringify({message: `Item ${event.pathParameters!.beer_id} deleted successfully.`})
-    }
+    return successResponse({message: `Item ${event.pathParameters!.beer_id} deleted successfully.`})
   } catch (error) {
     console.error("Error " + error)
-    return {
-      statusCode: 500,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': false,
-      },
-      body: JSON.stringify({ error: "Internal server error." }),
-    };
+    return interServerError({ error: "Internal server error." })
   }
 };
 
