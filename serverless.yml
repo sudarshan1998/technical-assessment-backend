@@ -58,37 +58,4 @@ resources:
             - ".execute-api.${self:provider.region}.amazonaws.com/${self:provider.stage}"
 
 functions:
-  HealthCheck:
-    handler: src/functions/healthcheck.healthcheck
-    description: Healthcheck to ensure the service is up
-    events:
-      - http:
-          path: healthcheck
-          method: get
-
-  AddBeer:
-    handler: src/functions/add-beer.handler
-    description: Add beer to database
-    events:
-      - http:
-          path: beer
-          method: post
-          cors: true
-
-  DeleteBeer:
-    handler: src/functions/delete-beer.handler
-    description: Delete beer from the database
-    events:
-      - http:
-          path: beer/{beer_id}
-          method: delete
-          cors: true
-
-  GetAllBeers:
-    handler: src/functions/get-all-beers.handler
-    description: Get all the beers from the database
-    events:
-      - http:
-          path: beers
-          method: get
-          cors: true
+  - ${file(src/functions/index.yml)}

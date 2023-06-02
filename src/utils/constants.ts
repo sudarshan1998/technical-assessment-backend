@@ -1,9 +1,14 @@
+/**
+ * This file contains the variables and constants which are frequently used
+ * /** */
+
+ //Header for the cors policy
 const headers = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Credentials': false,
   }
 
-export const successResponse = (body: any) => {
+export const successResponse = (body: {}) => {
     return {
         statusCode: 200,
         headers,
@@ -11,7 +16,7 @@ export const successResponse = (body: any) => {
     }
 }
 
-export const interServerError = (body: any) => {
+export const interServerError = (body: {}) => {
     return {
         statusCode: 500,
         headers,
@@ -19,7 +24,7 @@ export const interServerError = (body: any) => {
     }
 }
 
-export const otherError = (body: any) => {
+export const otherError = (body: {}) => {
     return {
         statusCode: 400,
         headers,
