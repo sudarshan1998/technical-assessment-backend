@@ -1,8 +1,16 @@
 service: plerion-beers 
 
+plugins:
+  - serverless-plugin-typescript
+  - serverless-stack-output
+  - serverless-offline
+
 provider:
   name: aws
   runtime: nodejs18.x
+  memorySize: 512
+  tracing:
+    lambda: true
   stage: ${opt:stage, 'dev'}
   region: us-east-1
   environment:
@@ -18,22 +26,12 @@ provider:
             - 'dynamodb:UpdateItem'
             - 'dynamodb:DeleteItem'
           Resource: "*"
-
 custom:
   stage: ${opt:stage, 'dev'}
   output:
     file: .serverless/output.json
 
 resources:
-  Outputs:
-    ApiUrl:
-      Description: "The API Gateway URL"
-      Value:
-        Fn::Join:
-          - ""
-          - - "https://"
-            - Ref: ApiGatewayRestApi
-            - ".execute-api.${self:provider.region}.amazonaws.com/${self:provider.stage}"
   Resources:
     BeersTable:
       Type: AWS::DynamoDB::Table
@@ -44,15 +42,20 @@ resources:
         KeySchema:
           - AttributeName: beer_id
             KeyType: HASH
-        ProvisionedThroughput:
-          ReadCapacityUnits: 5
-          WriteCapacityUnits: 5
         TableName: ${self:service}-BeersTable-${sls:stage}
-
-plugins:
-  - serverless-plugin-typescript
-  - serverless-stack-output
-  - serverless-offline
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        	
+  Outputs:
+    ApiUrl:
+      Description: "The API Gateway URL"
+      Value:
+        Fn::Join:
+          - ""
+          - - "https://"
+            - Ref: ApiGatewayRestApi
+            - ".execute-api.${self:provider.region}.amazonaws.com/${self:provider.stage}"
 
 functions:
   - ${file(src/functions/index.yml)}

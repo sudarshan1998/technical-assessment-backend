@@ -1,5 +1,6 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import AWS from "aws-sdk";
+import { successResponse, interServerError } from "../utils/constants"
 
 const dynamoDB: AWS.DynamoDB.DocumentClient = new AWS.DynamoDB.DocumentClient();
 
@@ -13,16 +14,10 @@ export const handler = async (
 ): Promise<APIGatewayProxyResult> => {
   try {
     const allBeers = await getAllBeers()
-    return {
-      statusCode: 200,
-      body: JSON.stringify({data: allBeers})
-    }
+    return successResponse({data: allBeers})
   } catch (error) {
     console.error("Error " + error)
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: "Internal server error." }),
-    };
+    return interServerError({ error: "Internal server error." })
   }
 };
 
@@ -37,6 +32,7 @@ const getAllBeers = async ()=> {
   };
   // DynamoDB query to get all items from database
   const allBeers = await dynamoDB.scan(params).promise()
+  console.log("\n the all beers are \n" + JSON.stringify(allBeers))
   if(allBeers.Items) return allBeers.Items
   return []
 }

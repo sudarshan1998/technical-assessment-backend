@@ -1,6 +1,7 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import AWS from "aws-sdk";
 import { getUuid } from "../utils/uuid"
+import { successResponse, interServerError, otherError } from "../utils/constants"
 
 // Request from the front end
 type RequestBody = {
@@ -11,7 +12,7 @@ type RequestBody = {
   description: string
 }
 
-const dynamoDB: AWS.DynamoDB.DocumentClient = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
+const dynamoDB: AWS.DynamoDB.DocumentClient = new AWS.DynamoDB.DocumentClient();
 
 /**
  * Handler to handle the main business logic
@@ -26,24 +27,15 @@ export const handler = async (
   const errors: string[] = validateRequestBody(body)
 
   if (errors.length > 0) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify({error: errors})
-    }
+    return otherError({error: errors})
   }
 
   try {
     await addBeer(body)
-    return {
-      statusCode: 200,
-      body: JSON.stringify({message: "Item saved successfully."})
-    }
+    return successResponse({message: "Item saved successfully."})
   } catch (error) {
     console.error("Error " + error)
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: "Internal server error." }),
-    };
+    return interServerError({ error: "Internal server error." })
   }
 };
 
@@ -56,10 +48,7 @@ const addBeer = async (body: RequestBody) => {
   const beerId: AWS.DynamoDB.PutItemInputAttributeMap = getUuid()
   if(!beerId) {
     console.error("Error: Error generating beerId" )
-    return {
-      statusCode: 400,
-      body: JSON.stringify({error: "Error generating beerId"})
-    }
+    return otherError({error: "Error generating beerId"})
   }
   
   const params = {
