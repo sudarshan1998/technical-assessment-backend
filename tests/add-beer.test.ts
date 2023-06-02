@@ -39,7 +39,7 @@ describe('Handler', () => {
   it('should return a successful response when the request body is valid', async () => {
     const result = await handler(mockEvent);
     expect(result.statusCode).toBe(200);
-    expect(result.body).toBe(JSON.stringify({ message: 'Item saved successfully.' }));
+    expect(result.body).toBe(JSON.stringify({ body: { message: 'Item saved successfully.' }}));
   });
 
   it('should return an error response when the request body is invalid', async () => {
@@ -54,8 +54,7 @@ describe('Handler', () => {
     } as any;
 
     const result = await handler(invalidEvent);
-
-    expect(result.statusCode).toBe(500);
+    expect(result.statusCode).toBe(400);
     expect(result.body).toContain('The field');
     expect(mockDynamoDBPut).not.toHaveBeenCalled();
   });

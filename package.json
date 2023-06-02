@@ -13,6 +13,7 @@
   "license": "MIT",
   "dependencies": {
     "aws-lambda": "^1.0.7",
+    "sinon": "^15.1.0",
     "uuid": "^9.0.0"
   },
   "devDependencies": {

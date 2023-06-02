@@ -32,6 +32,7 @@ const getAllBeers = async ()=> {
   };
   // DynamoDB query to get all items from database
   const allBeers = await dynamoDB.scan(params).promise()
+  console.log("\n the all beers are \n" + JSON.stringify(allBeers))
   if(allBeers.Items) return allBeers.Items
   return []
 }

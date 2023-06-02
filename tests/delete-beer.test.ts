@@ -49,7 +49,7 @@ describe('handler', () => {
         'Access-Control-Allow-Credentials': false,
         'Access-Control-Allow-Origin': '*',
       },
-      body: JSON.stringify({ message: 'Item sample_id deleted successfully.' }),
+      body: JSON.stringify({ body: {message: 'Item sample_id deleted successfully.' }}),
     });
   });
 });

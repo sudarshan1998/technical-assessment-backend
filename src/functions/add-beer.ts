@@ -27,7 +27,7 @@ export const handler = async (
   const errors: string[] = validateRequestBody(body)
 
   if (errors.length > 0) {
-    return successResponse({error: errors})
+    return otherError({error: errors})
   }
 
   try {
